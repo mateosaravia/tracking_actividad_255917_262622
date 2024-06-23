@@ -1,15 +1,86 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+import { useEffect, useState } from 'react';
+import { Form, Input, Button, Select, Alert } from 'antd';
+
+import { getUserGames, getUserByName } from '../../services/users/user-service';
+import { createGameSession } from '../../services/games/game-service';
+
+const { Option } = Select;
 
 const GameSessionForm = () => {
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [form] = Form.useForm();
+  const [userId, setUserId] = useState('');
+  const [games, setGames] = useState([]);
+  const [username, setUsername] = useState('');
 
-  const onFinish = (values) => {
-    console.log('Received values:', values);
+  const fetchGames = async () => {
+    const response = await getUserGames(userId);
+    if (response instanceof Error) {
+      let message = response.message;
+      setErrorMessage(message);
+      setError(true);
+    }
+    else {
+      setError(false);
+      setGames(response);
+    }
   };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+  const fetchUser = async () => {
+    const response = await getUserByName(username);
+    if (response instanceof Error) {
+      let message = response.response.data.result;
+      setErrorMessage(message);
+      setError(true);
+    }
+    else {
+      setError(false);
+      setUserId(response.user_id);
+      setGames([]);
+    }
+  };
+
+  useEffect(() => {
+    if (username) {
+      fetchUser();
+    }
+  }, [username]);
+
+  useEffect(() => {
+    if (userId) {
+      fetchGames();
+    }
+  }, [userId]);
+
+  const handleUsernameBlur = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const resetSuceess = () => {
+    setSuccess(false);
+  };
+
+  const onFinish = async (values) => {
+    const result = await createGameSession({
+      user_id: userId,
+      game_id: values.game,
+      session_start: values.session_start,
+      session_end: values.session_end,
+    });
+
+    if (result instanceof Error) {
+      let message = result.response.data.error;
+      setErrorMessage(message);
+      setError(true);
+    }
+    else {
+      setError(false);
+      form.resetFields();
+      setSuccess(true);
+    }
   };
 
   return (
@@ -20,24 +91,31 @@ const GameSessionForm = () => {
       wrapperCol={{ span: 16 }}
       initialValues={{ remember: true }}
       onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
       autoComplete="off"
+      onBlur={resetSuceess}
     >
       <Form.Item
         label="Username"
         name="username"
         rules={[{ required: true, message: 'Please input the username!' }]}
       >
-        <Input />
+        <Input onBlur={handleUsernameBlur} />
       </Form.Item>
 
-      // combobox for game selection
       <Form.Item
         label="Game"
         name="game"
         rules={[{ required: true, message: 'Please select the game!' }]}
       >
-        <Input />
+        <Select
+          placeholder="Select a option and change input text above"
+          allowClear
+          disabled={!games.length}
+        >
+          {games.map((game) => (
+            <Option key={game.game_id} value={game.game_id}>{game.game_name}</Option>
+          ))}
+        </Select>
       </Form.Item>
 
       <Form.Item
@@ -55,6 +133,9 @@ const GameSessionForm = () => {
       >
         <Input />
       </Form.Item>
+
+      {error && <Alert message={errorMessage} type="error" style={{ padding: '10px', marginBottom: '10px' }} />}
+      {success && <Alert message="Game session created successfully!" type="success" style={{ padding: '10px', marginBottom: '10px' }} />}
 
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
         <Button type="primary" htmlType="submit">
