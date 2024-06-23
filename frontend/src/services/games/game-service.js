@@ -37,8 +37,21 @@ async function unlockLevel(data) {
         });
 };
 
+async function getGameLevels(id) {
+    return await axios
+        .get(`/games/${id}/levels`)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            handleError(error);
+            return error;
+        });
+};
+
 export {
     createGameSession,
     createAchievement,
-    unlockLevel
+    unlockLevel,
+    getGameLevels
 };
