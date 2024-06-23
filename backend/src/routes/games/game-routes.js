@@ -5,6 +5,6 @@ const router = Router();
 
 router.post('/game-sessions', gameController.createGameSession);
 router.post('/achievements', gameController.createAchievement);
-router.post('/levels/unlock/:id', gameController.unlockLevel);
+router.post('/levels/unlock', gameController.unlockLevel);
 
 module.exports = router;

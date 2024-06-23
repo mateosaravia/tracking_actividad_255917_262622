@@ -25,9 +25,9 @@ async function createAchievement(req, res) {
 };
 
 async function unlockLevel(req, res) {
-    const id = req.params.id;
+    const data = req.body;
     try {
-        const level = await gameService.unlockLevel(id);
+        const level = await gameService.unlockLevel(data);
         res.status(200).json(level);
     }
     catch (err) {

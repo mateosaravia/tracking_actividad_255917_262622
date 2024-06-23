@@ -1,10 +1,17 @@
 version: '3'
 services:
-
   app:
     build: .
     container_name: backend-app
     ports:
-      - '3000:3000'
+      - '4000:4000'
     volumes:
       - ./src:/app/src
+    
+  cassandra:
+    image: cassandra:latest
+    container_name: cassandra
+    ports:
+      - '9042:9042'
+    volumes:
+      - ./scripts:/var/lib/cassandra/scripts
