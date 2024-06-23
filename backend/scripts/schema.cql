@@ -7,7 +7,10 @@ CREATE TABLE users (
     user_name TEXT,
     user_email TEXT,
     user_registration_date TEXT,
+    played_games set<UUID>
 );
+
+CREATE INDEX ON user_activity.users(user_name);
 
 CREATE TABLE games (
     game_id UUID PRIMARY KEY,
