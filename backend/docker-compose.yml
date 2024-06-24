@@ -1,0 +1,19 @@
+version: '3'
+name: tracking
+
+services:
+  app:
+    build: .
+    container_name: tracking-backend
+    ports:
+      - '4000:4000'
+    volumes:
+      - ./src:/app/src
+    
+  cassandra:
+    image: cassandra:latest
+    container_name: cassandra
+    ports:
+      - '9042:9042'
+    volumes:
+      - ./scripts:/var/lib/cassandra/scripts
