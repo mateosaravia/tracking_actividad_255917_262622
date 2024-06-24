@@ -49,9 +49,35 @@ async function getGameLevels(id) {
         });
 };
 
+async function getGameByName(name) {
+    return await axios
+        .get(`/games/${name}`)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            handleError(error);
+            return error;
+        });
+}
+
+async function getGameIndicators(id) {
+    return await axios
+        .get(`/games/${id}/indicators`)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            handleError(error);
+            return error;
+        });
+};
+
 export {
     createGameSession,
     createAchievement,
     unlockLevel,
-    getGameLevels
+    getGameLevels,
+    getGameByName,
+    getGameIndicators
 };
