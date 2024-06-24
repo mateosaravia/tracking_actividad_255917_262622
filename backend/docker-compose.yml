@@ -1,4 +1,6 @@
 version: '3'
+name: tracking
+
 services:
   app:
     build: .

@@ -20,3 +20,5 @@ INSERT INTO games (game_id, game_name, game_description, game_category, game_rel
 VALUES (uuid(), 'God of War', 'Action-adventure game', 'Action RPG', '2018-04-20', '1.0', 49.99);
 INSERT INTO games (game_id, game_name, game_description, game_category, game_release_date, game_version, game_price)
 VALUES (uuid(), 'Minecraft', 'Sandbox game', 'Adventure', '2011-11-18', '1.0', 19.99);
+
+UPDATE users SET played_games = played_games + {768e49fa-3f95-4f03-a0d1-c6d718e5e4fa} WHERE user_id = 6f7ed0b6-0f41-4ea2-ad71-8b782358c5b5
