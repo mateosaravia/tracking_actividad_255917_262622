@@ -22,6 +22,8 @@ CREATE TABLE games (
     game_price DOUBLE
 );
 
+CREATE INDEX ON user_activity.games(game_name);
+
 CREATE TABLE game_sessions (
     session_id UUID,
     user_id UUID,
@@ -47,6 +49,8 @@ CREATE TABLE levels (
     level_name TEXT,
     PRIMARY KEY ((user_id, game_id), level_id)
 );
+
+CREATE INDEX ON user_activity.levels(game_id);
 
 CREATE TABLE unlocked_levels (
     level_id UUID,

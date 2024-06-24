@@ -30,7 +30,49 @@ async function getUserGames(req, res) {
     }
 };
 
+async function getUserAchievements(req, res) {
+    const { id } = req.params;
+    try {
+        const achievements = await userService.getUserAchievements(id);
+
+        res.status(200).json(achievements);
+    }
+    catch (err) {
+        console.error('Error fetching user:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+async function getUnlockedLevels(req, res) {
+    const { id } = req.params;
+    try {
+        const levels = await userService.getUnlockedLevels(id);
+
+        res.status(200).json(levels);
+    }
+    catch (err) {
+        console.error('Error fetching user:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+async function getUserGameSessions(req, res) {
+    const { id } = req.params;
+    try {
+        const gameSessions = await userService.getUserGameSessions(id);
+
+        res.status(200).json(gameSessions);
+    }
+    catch (err) {
+        console.error('Error fetching user:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
 module.exports = {
     getUserByName,
-    getUserGames
+    getUserGames,
+    getUserAchievements,
+    getUnlockedLevels,
+    getUserGameSessions
 };
